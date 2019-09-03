@@ -49,18 +49,35 @@ and the return value is not important.
  */
 
 function repeat(operation, num) {
-  // Modify this so it doesn't cause a stack overflow!
   if (num <= 0) return
   operation()
-  return repeat(operation, --num)
+
+    return function(){
+      return repeat(operation, --num);
+    }
+
+//  return repeat(operation, --num)
 }
 
 function trampoline(fn) {
-  // You probably want to implement a trampoline!
+  while(fn)
+    fn = fn();
 }
 
 module.exports = function(operation, num) {
+  return trampoline(function() {
+    return repeat(operation, num)
+  });
   // You probably want to call your trampoline here!
-  return repeat(operation, num)
+  //return repeat(operation, num)
 }
 
+var x = 0;
+
+function op(){
+  x++;
+}
+
+//z = new Z();
+module.exports(op, 20);
+console.log(x);
